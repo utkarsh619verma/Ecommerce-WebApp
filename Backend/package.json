@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "\t"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/utkarsh619verma/Ecommerce-WebApp.git"
+  },
+  "author": "utkarsh_verma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/utkarsh619verma/Ecommerce-WebApp/issues"
+  },
+  "homepage": "https://github.com/utkarsh619verma/Ecommerce-WebApp#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.0"
+  }
+}
