@@ -1,11 +1,15 @@
-import { Navbar } from "./Components/Navbar";
 import { Home } from "./Pages/Home";
+import { UserContext } from "./Context/user";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 export function App() {
   return (
-    <>
-      <Navbar />
-      <Home />
-    </>
+    <UserContext>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+        </Routes>
+      </Router>
+    </UserContext>
   );
 }
