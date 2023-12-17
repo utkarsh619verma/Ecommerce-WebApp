@@ -73,4 +73,18 @@ router.get("/logout", async (req, res) => {
   }
 });
 
+//REFETCH USER
+
+router.get("/refetch", (req, res) => {
+  const token = req.cookies.jwttoken;
+  jwt.verify(token, process.env.SECRET_KEY, {}, async (err, data) => {
+    if (err) {
+      console.log("dsad");
+      return res.status(500).json(err);
+    }
+    console.log("Asd");
+    res.status(200).json(data);
+  });
+});
+
 module.exports = router;

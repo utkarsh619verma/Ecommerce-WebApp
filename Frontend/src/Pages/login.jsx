@@ -13,10 +13,12 @@ export function Login({ setLogin }) {
   const [phone, setPhone] = useState(0);
   const [errormsg, setErrorMsg] = useState({});
   const [err, setError] = useState(false);
-  const { setUser } = useContext(usercontext);
+  const { user, setUser } = useContext(usercontext);
   const navigate = useNavigate();
 
   let userdata = {};
+
+  if (user) setLogin(false);
 
   const handleUserData = async () => {
     if (verify == "Email") {

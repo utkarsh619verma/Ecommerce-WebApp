@@ -55,7 +55,7 @@ export function Navbar() {
               }}
               className="bg-white w-[100px] h-[30px] rounded-[3px] text-candy-red  "
             >
-              Logout
+              {user.username}
             </button>
           ) : (
             <button
