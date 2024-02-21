@@ -1,7 +1,7 @@
 import { navData } from "../../Data";
 export function CategoryBanner() {
   return (
-    <div className="flex overflow-x-scroll no-scrollbar  xl:mx-[40px] n justify-between ">
+    <div className="flex overflow-x-scroll no-scrollbar m-2  xl:mx-[40px] n justify-between ">
       {navData.map((element, index) => (
         <div className="xl:w-[104px] mx-5 " key={index}>
           <img

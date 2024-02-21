@@ -19,9 +19,9 @@ const Responsive = {
 
 export function PromotionBanner() {
   return (
-    <>
+    <div className=" bg-[#F2F2F2] p-2">
       <Carousel
-        className="bg-[#F2F2F2]  py-3 "
+        className="bg-[#F2F2F2]"
         autoPlay={true}
         dotListClass="custom-dot-list-style"
         itemClass="carousel-item-padding-40-px"
@@ -37,6 +37,6 @@ export function PromotionBanner() {
           <img key={element.id} src={element.url} alt="" />
         ))}
       </Carousel>
-    </>
+    </div>
   );
 }

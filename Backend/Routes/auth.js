@@ -33,7 +33,8 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, phone, password } = req.body;
-    if (!email) return res.status(400).send("Please enter email/phone no.");
+    if (!email && !phone)
+      return res.status(400).send("Please enter email/phone no.");
     let user;
     if (email) {
       user = await User.findOne({ email: email });

@@ -1,6 +1,7 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Home } from "./Pages/Home";
 import { UserContext } from "./Context/user";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Detailview } from "./Details/Detailview";
 
 export function App() {
   return (
@@ -8,6 +9,7 @@ export function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<Home />} />
+          <Route exact path="/product/:id" element={<Detailview />} />
         </Routes>
       </Router>
     </UserContext>

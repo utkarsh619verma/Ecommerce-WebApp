@@ -6,6 +6,7 @@ import { Login } from "../Pages/login";
 import { usercontext } from "../Context/user";
 import { useNavigate } from "react-router-dom";
 import { URL } from "../../url";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export function Navbar() {
@@ -24,22 +25,33 @@ export function Navbar() {
       console.log(error);
     }
   };
+
+  // suggesting product in search bar
+  function getProductSuggestion(input) {
+    console.log(input);
+  }
+
   return (
     <>
       {login && <Login setLogin={setLogin} />}
       <div className="flex flex-row py-5 px-5 max-h-16 bg-candy-red w-full xl:px-[130px] justify-between  ">
         <div className="flex items-center md:space-x-3 space-x-10 ">
-          <div className="logo">
-            <h1 className="text-white font-semibold italic text-lg md:text-xl">
-              ShopCart
-            </h1>
-          </div>
+          <Link to="/">
+            <div className="logo">
+              <h1 className="text-white font-semibold italic text-lg md:text-xl">
+                ShopCart
+              </h1>
+            </div>
+          </Link>
           <div className="flex items-center">
             <input
               className="outline-none px-3 rounded-lg border-b border-b-black focus:border-b-gray-400 w-[40vw]  "
               type="search"
               name=""
               id=""
+              onInput={(e) => {
+                getProductSuggestion(e.target.value);
+              }}
             />
             <p className=" relative right-[29px]  ">
               <BsSearch size={20} />
