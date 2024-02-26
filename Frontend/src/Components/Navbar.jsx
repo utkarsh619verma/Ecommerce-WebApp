@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { getProducts } from "../Redux/actions/productAction";
 import { Menu } from "./Menu";
 import { BsSearch } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
@@ -8,11 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { URL } from "../../url";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 export function Navbar() {
   const [login, setLogin] = useState(false);
   const { user, setUser } = useContext(usercontext);
+  const [userInput, setUserInput] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handlelogout = async () => {
     try {
       const res = await axios.get(URL + "/api/auth/logout", {
@@ -27,9 +32,11 @@ export function Navbar() {
   };
 
   // suggesting product in search bar
-  function getProductSuggestion(input) {
-    console.log(input);
-  }
+  const { products } = useSelector((state) => state.getProducts || {});
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
   return (
     <>
@@ -43,19 +50,38 @@ export function Navbar() {
               </h1>
             </div>
           </Link>
-          <div className="flex items-center">
+          <div className="flex relative items-center">
             <input
-              className="outline-none px-3 rounded-lg border-b border-b-black focus:border-b-gray-400 w-[40vw]  "
+              className="outline-none px-3 border-b border-b-black focus:border-b-gray-400 w-[40vw]  "
               type="search"
               name=""
               id=""
-              onInput={(e) => {
-                getProductSuggestion(e.target.value);
+              onChange={(e) => {
+                setUserInput(e.target.value);
+                console.log(userInput);
               }}
             />
             <p className=" relative right-[29px]  ">
               <BsSearch size={20} />
             </p>
+            {userInput != "" && (
+              <div className="text-black text-lg z-50 absolute top-[25px]  bg-white ">
+                {products
+                  .filter((product) =>
+                    product.title.longTitle
+                      .toLowerCase()
+                      .includes(userInput.toLowerCase())
+                  )
+                  .map((product) => (
+                    <p
+                      key={product._id}
+                      className="my-3 px-2 border-b-[rgb(217,212,208)] border-b-[1px] w-full"
+                    >
+                      {product.title.longTitle}
+                    </p>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
         <div className=" text-white text-lg items-center lg:flex space-x-6  hidden ">

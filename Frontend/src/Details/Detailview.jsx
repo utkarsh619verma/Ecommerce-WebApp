@@ -1,4 +1,5 @@
 import { Navbar } from "../Components/Navbar";
+import { AddtoCart } from "../Redux/actions/cartAction";
 import { useDispatch } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -8,6 +9,7 @@ import { useSelector } from "react-redux";
 export function Detailview() {
   const dispatch = useDispatch();
   const [warranty_status, setWarrantyStatus] = useState(false);
+  const [quantity, setquantity] = useState(0);
   const [read_status, setReadStatus] = useState(true);
 
   const { id } = useParams();
@@ -56,6 +58,14 @@ export function Detailview() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  //adding to cart
+  useEffect(() => {
+    console.log(quantity);
+  }, [quantity]);
+  function movetocart() {
+    dispatch(AddtoCart(product.data._id, quantity));
+  }
+
   return (
     <>
       <Navbar />
@@ -69,7 +79,14 @@ export function Detailview() {
             />
 
             <div className="flex m-4 flex-column justify-between  ">
-              <button className="h-[58px] w-[49%] bg-yellow-500 text-white font-bold  ">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setquantity(quantity + 1);
+                  movetocart();
+                }}
+                className="h-[58px] w-[49%] bg-yellow-500 text-white font-bold  "
+              >
                 ADD TO CART
               </button>
               <button className="h-[58px] w-[49%] bg-orange-600 text-white font-bold  ">
