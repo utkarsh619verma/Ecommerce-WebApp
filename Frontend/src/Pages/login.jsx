@@ -1,5 +1,7 @@
 import PropTypes from "prop-types";
 import { useContext, useState } from "react";
+import { z } from "zod";
+import validator from "validator";
 import { usercontext } from "../Context/user";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -11,22 +13,37 @@ export function Login({ setLogin }) {
   const [verify, setverify] = useState("Email");
   const [altverify, setaltverify] = useState("Phone no.");
   const [phone, setPhone] = useState(0);
-  const [errormsg, setErrorMsg] = useState({});
+  const [errormsg, setErrorMsg] = useState("");
   const [err, setError] = useState(false);
   const { user, setUser } = useContext(usercontext);
   const navigate = useNavigate();
 
   let userdata = {};
-
+  const verify_phone = z.string().length(10);
   if (user) setLogin(false);
 
   const handleUserData = async () => {
     if (verify == "Email") {
+      if (!validator.isEmail(email)) {
+        setError(true);
+        setErrorMsg("Email format not correct");
+        return;
+      }
       userdata = {
         email: email,
         password: password,
       };
     } else {
+      if (
+        !validator.isNumeric(phone) ||
+        !verify_phone.safeParse(phone).success
+      ) {
+        setError(true);
+        setErrorMsg(
+          "Phone number should be 10 digits long and have digts only"
+        );
+        return;
+      }
       userdata = {
         phone: phone,
         password,

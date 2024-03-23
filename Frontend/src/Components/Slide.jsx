@@ -71,15 +71,14 @@ export function Slide({ products, title, timer }) {
                 to={`/product/${item._id}`}
               >
                 <img
-                  src={item.url}
+                  src={item.images[0]}
                   className="max-h-[60%] max-w-[100%] "
                   alt={item.title}
                 />
-                <p className="font-bold text-[#212121]">
-                  {item.title.shortTitle}
+                <p className="font-bold text-[#212121]">{item.title}</p>
+                <p className="text-green-400">
+                  Upto {Math.round(item.discountPercentage)}% off
                 </p>
-                <p className="text-green-400">{item.discount}</p>
-                <p className="text-[#212121] opacity-[0.6]">{item.tagline}</p>
               </Link>
             </div>
           ))}

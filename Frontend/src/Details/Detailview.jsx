@@ -9,10 +9,13 @@ import { useSelector } from "react-redux";
 export function Detailview() {
   const dispatch = useDispatch();
   const [warranty_status, setWarrantyStatus] = useState(false);
-  const [quantity, setquantity] = useState(0);
+  const [quantity, setquantity] = useState(1);
   const [read_status, setReadStatus] = useState(true);
-
+  const [current_image, setcurrentimage] = useState(0);
   const { id } = useParams();
+
+  //getting the product details
+  const { product } = useSelector((state) => state.getProductDetails || {});
 
   // review and rating and set warranty
   let random_review = useMemo(() => {
@@ -49,41 +52,60 @@ export function Detailview() {
   }, []);
 
   // eslint-disable-next-line no-unused-vars
-  const { loader, product } = useSelector(
-    (state) => state.getProductDetails || {}
-  );
+
   useEffect(() => {
     dispatch(getProductDetails(id));
     if (random_rating > 3) setWarrantyStatus(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  //adding to cart
-  useEffect(() => {
-    console.log(quantity);
-  }, [quantity]);
-  function movetocart() {
+  // Adding item to cart and handling cart quantity
+  function additemtocart() {
+    setquantity(quantity + 1);
     dispatch(AddtoCart(product.data._id, quantity));
+  }
+
+  //calculating original price from discount and final price
+  function original_price() {
+    let price = product.data.price * 100;
+    let discount = Math.round(product.data.discountPercentage);
+    let denom = 100 - discount;
+    return Math.round(price / denom);
   }
 
   return (
     <>
       <Navbar />
       {product && product.data && (
-        <div className="py-4  lg:px-[70px] bg-white  grid lg:grid-cols-2  xl:grid-rows-1 grid-rows max-h-[1100px] px-[30px] gap-x-3 ">
-          <div className="grid grid-cols-1 h-[100%] ">
-            <img
-              src={product.data.detailurl}
-              alt={product.data.title.shortTitle}
-              className="object-contain h-[100%] w-[90%] mx-auto shadow-[5px 10px 5px #e7dede] "
-            />
-
+        <div className="py-4 mt-16  lg:px-[70px] bg-white  grid lg:grid-cols-2  xl:grid-rows-1 grid-rows max-h-[1100px] px-[30px] gap-x-3 ">
+          <div className="flex flex-col ">
+            <div className="max-h-[800px] h-[600px] ">
+              <img
+                src={product.data.images[current_image]}
+                alt={product.data.title}
+                className="object-contain  lg:h-[80%]  mx-auto shadow-[5px 10px 5px #e7dede] "
+              />
+            </div>
+            <div className="flex justify-around max-h-[100px] ">
+              {product.data.images.map((element, index) => {
+                return (
+                  <img
+                    src={element}
+                    width={"60px"}
+                    height={"40px"}
+                    className="mx-6 cursor-pointer max-h-[550px] "
+                    key={index}
+                    onClick={() => {
+                      setcurrentimage(index);
+                    }}
+                  />
+                );
+              })}
+            </div>
             <div className="flex m-4 flex-column justify-between  ">
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setquantity(quantity + 1);
-                  movetocart();
+                onClick={() => {
+                  additemtocart();
                 }}
                 className="h-[58px] w-[49%] bg-yellow-500 text-white font-bold  "
               >
@@ -99,7 +121,10 @@ export function Detailview() {
               <h1 className="text-xl">{product.data.title.longTitle}</h1>
               <div className="flex mt-2 ">
                 <p>
-                  {random_rating} ratings and {random_review} reviews
+                  <span className="bg-green-800 text-white p-1 ">
+                    {random_rating} &#9733;
+                  </span>{" "}
+                  ratings and {random_review} reviews
                 </p>
                 <img
                   className="ml-2"
@@ -111,40 +136,43 @@ export function Detailview() {
               </div>
               <div className="mt-2">
                 <span className="text-3xl mr-3 ">
-                  {product.data.price.cost}
+                  &#8377;{product.data.price}
                 </span>
                 <span className="text-gray-600 text-l line-through mr-2 ">
-                  {product.data.price.mrp}
+                  &#8377;{original_price()}
                 </span>
                 <span className="text-green-400">
-                  {" "}
-                  {product.data.price.discount}
+                  {Math.round(product.data.discountPercentage)}% off
                 </span>
               </div>
               <div className="mt-3">
-                <h1 className="text-lg mb-1 ">Available Offers </h1>
-                <p>
-                  <span className="font-bold my-4 ">-</span>Get extra 20%off up
+                <h1 className="text-lg mb-1 font-bold ">Available Offers </h1>
+                <p className="text-[14px]">
+                  <span className="font-bold  my-4 ">
+                    -Get extra 20%off up{" "}
+                  </span>
                   Rs50 on one item(s) T&C{" "}
                 </p>
-                <p>
-                  <span className="font-bold my-4 ">-</span>Get extra 13% off
+                <p className="text-[14px]">
+                  <span className="font-bold my-4 ">-Get extra 20%off up </span>
                   (price inclusive of discount) T&C
                 </p>
-                <p>
-                  <span className="font-bold my-4 ">-</span>Sign up for Flipkart
+                <p className="text-[14px]">
+                  <span className="font-bold my-4 ">
+                    -Sign up for Flipkart{" "}
+                  </span>
                   Pay Later and get Flipkart Gift Card worth Rs100 Know More
                 </p>
-                <p>
-                  <span className="font-bold my-4 ">-</span>Buy 2 items save
+                <p className="text-[14px]">
+                  <span className="font-bold my-4 ">-Buy 2 items save </span>
                   5%;Buy 3 or more save 10% T&C
                 </p>
-                <p>
-                  <span className="font-bold my-4 ">-</span>5% Cashback on
+                <p className="text-[14px]">
+                  <span className="font-bold my-4 ">-5% Cashback on </span>
                   Flipkart Axis Band Card
                 </p>
-                <p>
-                  <span className="font-bold">-</span>No Cost EMI on Bajaj
+                <p className="text-[14px]">
+                  <span className="font-bold">-No Cost EMI on Bajaj </span>
                   Finserv EMI Card on cart value above Rs2999 T&C
                 </p>
               </div>
@@ -192,7 +220,11 @@ export function Detailview() {
                         setReadStatus(!read_status);
                       }}
                     >
-                      {read_status ? "...Read More" : " Read Less"}
+                      {product.data.description.length < 150
+                        ? ""
+                        : read_status
+                        ? "...Read More"
+                        : " Read Less"}
                     </span>{" "}
                   </p>
                 </div>

@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
     if (email) {
       user = await User.findOne({ email: email });
       if (!user) {
-        console.log("EMail wrong");
+        console.log("Email wrong");
         return res.status(500).send("Email not found!");
       }
     } else {
@@ -55,9 +55,9 @@ router.post("/login", async (req, res) => {
       process.env.SECRET_KEY,
       { expiresIn: "3h" }
     );
-    res.cookie("jwttoken", jwtToken).status(200).json(user);
+    res.cookie("jwttoken", jwtToken, { httpOnly: true }).status(200).json(user);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json("Error");
   }
 });
 

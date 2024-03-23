@@ -2,6 +2,8 @@ const express = require("express");
 const Product = require("../Models/Product");
 const router = express.Router();
 
+Product.updateMany({}, { $set: { quantity: 0 } });
+
 router.post("/create", async (req, res) => {
   try {
     const newproduct = new Product(req.body);

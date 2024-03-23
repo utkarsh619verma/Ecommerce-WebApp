@@ -17,7 +17,7 @@ export function Navbar() {
   const [userInput, setUserInput] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { total_quantity } = useSelector((state) => state.cartQuantity);
   const handlelogout = async () => {
     try {
       const res = await axios.get(URL + "/api/auth/logout", {
@@ -38,10 +38,22 @@ export function Navbar() {
     dispatch(getProducts());
   }, [dispatch]);
 
+  // debouncing search bar
+  useEffect(() => {
+    let timer;
+
+    timer = setTimeout(() => {
+      console.log(userInput);
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [userInput]);
+
   return (
     <>
       {login && <Login setLogin={setLogin} />}
-      <div className="flex flex-row py-5 px-5 max-h-16 bg-candy-red w-full xl:px-[130px] justify-between  ">
+      <div className="flex flex-row py-5 px-5 max-h-16 bg-blue-500 w-full xl:px-[130px] justify-between fixed top-0 z-[10000]  ">
         <div className="flex items-center md:space-x-3 space-x-10 ">
           <Link to="/">
             <div className="logo">
@@ -58,7 +70,6 @@ export function Navbar() {
               id=""
               onChange={(e) => {
                 setUserInput(e.target.value);
-                console.log(userInput);
               }}
             />
             <p className=" relative right-[29px]  ">
@@ -98,21 +109,30 @@ export function Navbar() {
           ) : (
             <button
               onClick={() => {
-                console.log("ad");
                 setLogin(true);
               }}
-              className="bg-white w-[100px] h-[30px] rounded-[3px] text-candy-red  "
+              className="bg-white w-[100px] h-[30px] rounded-[3px] text-blue-500 "
             >
               Login
             </button>
           )}
           <p>Become a Seller</p>
           <p>More</p>
-          <div className="flex items-center ">
+          <div
+            onClick={() => {
+              navigate("/cart");
+            }}
+            className="flex items-center relative cursor-pointer "
+          >
+            {total_quantity > 0 && (
+              <p className="absolute bottom-3 cursor-pointer left-14 w-[30px] h-[30px] py-[2px] bg-yellow-300 border-2 border-white rounded-2xl text-sm text-center  ">
+                {total_quantity}
+              </p>
+            )}
             <p>
               <FaShoppingCart />
             </p>
-            <p>Cart</p>
+            <p className="px-[3px]">Cart</p>
           </div>
         </div>
         <div className="lg:hidden flex flex-col ">
